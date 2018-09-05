@@ -6,8 +6,8 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.young.common.Callback;
 import org.young.common.Status;
-import org.young.common.exception.TokenException;
 import org.young.common.protocol.provider.*;
 import org.young.common.protocol.request.ReqHead;
 import org.young.common.protocol.request.ReqIgnoreTokenVerify;
@@ -175,18 +175,26 @@ public class VerifyUtils {
         final VerifyChannelResult result = new VerifyChannelResult();
         //检查渠道号
         if(head.getChannel() == null || head.getChannel() < 0){
-            log.warn("渠道号({})错误!", head.getChannel());
+            log.warn("verifyChannel-渠道号({})错误!", head.getChannel());
             result.setResponse(RespUtils.createResponse(RespStatus.EmptyWithChannel));
             return result;
         }
         //加载渠道数据
-        final Channel channel = channelProvider.loadChannelByCode(head.getChannel());
-        if(channel == null){
-            log.warn("渠道号({})不存在", head.getChannel());
-            result.setResponse(RespUtils.createResponse(RespStatus.NotExistWithChannel));
+        final Callback<Channel> callback = channelProvider.loadChannelByCode(head.getChannel());
+        if(callback == null || callback.getData() == null){
+            log.warn("verifyChannel-渠道号({})不存在=>{}", head.getChannel(), callback);
+            if(callback != null) {
+                final RespStatus status = RespStatus.parse(callback.getCode());
+                result.setResponse(status == null ?
+                        RespUtils.createResponse(RespStatus.NotExistWithChannel, callback.getMessage())
+                        : RespUtils.createResponse(status));
+            }else{
+                result.setResponse(RespUtils.createResponse(RespStatus.NotExistWithChannel));
+            }
             return result;
         }
         //检查渠道状态
+        final Channel channel = callback.getData();
         if(channel.getStatus() == Status.Disabled){
             log.warn("渠道(channel: {})-已禁用", head.getChannel());
             result.setResponse(RespUtils.createResponse(RespStatus.DisabledWithChannel));
@@ -237,30 +245,30 @@ public class VerifyUtils {
      * 令牌数据接口。
      * @return 验证结果。
      */
-    private static Response<? extends Serializable> verifyToken(@Nonnull final ReqHead head, @Nonnull final TokenProvider tokenProvider){
-        try {
-            //加载令牌用户
-            final TokenUser tokenUser = tokenProvider.loadUserByToken(head.getChannel(), head.getToken());
-            if (tokenUser == null) {
-                log.warn("verifyToken(channel: {}, token: {})-令牌无效!", head.getChannel(), head.getToken());
-                return RespUtils.createResponse(RespStatus.TokenInvalid);
-            }
-            //加载http会话
-            final ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            if (requestAttributes != null) {
-                final HttpServletRequest servletRequest = requestAttributes.getRequest();
-                final HttpSession session = servletRequest.getSession();
-                if (session != null) {
-                    //缓存到session
-                    session.setAttribute(SessionConstants.SESSION_TOKEN_USER_KEY, tokenUser);
-                }
-            }
-        }catch (TokenException e){
-            log.warn("verifyToken(head: {}, code: {})-exp: {}", head, e.getCode(), e.getMessage());
-            if(e.getCode() == TokenException.TokenExpireException.code){
-                return RespUtils.createResponse(RespStatus.TokenExpire);
-            }
+    private static Response<? extends Serializable> verifyToken(@Nonnull final ReqHead head, @Nonnull final TokenProvider tokenProvider) {
+        //加载令牌用户
+        final Callback<TokenUser> callback = tokenProvider.loadUserByToken(head.getChannel(), head.getToken());
+        if (callback == null) {
+            log.warn("verifyToken(channel: {}, token: {})-令牌无效!", head.getChannel(), head.getToken());
             return RespUtils.createResponse(RespStatus.TokenInvalid);
+        }
+        //检查令牌用户数据
+        if(callback.getData() == null){
+            log.warn("verifyToken(head: {}, callback: {})-没有令牌数据!", head, callback);
+            final RespStatus respStatus = RespStatus.parse(callback.getCode());
+            return respStatus == null ?
+                    RespUtils.createResponse(RespStatus.TokenInvalid, callback.getMessage())
+                    : RespUtils.createResponse(respStatus);
+        }
+        //加载http会话
+        final ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null) {
+            final HttpServletRequest servletRequest = requestAttributes.getRequest();
+            final HttpSession session = servletRequest.getSession();
+            if (session != null) {
+                //缓存到session
+                session.setAttribute(SessionConstants.SESSION_TOKEN_USER_KEY, callback.getData());
+            }
         }
         return null;
     }

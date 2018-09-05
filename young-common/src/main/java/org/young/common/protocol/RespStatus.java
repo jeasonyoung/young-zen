@@ -83,16 +83,8 @@ public enum RespStatus implements Serializable {
      */
     ErrWithProtocolVerify(501,"校验报文错误");
 
-    private int code;
-    private String msg;
-
-    /**
-     * 构造函数。
-     * @param code
-     * 状态码。
-     * @param msg
-     * 状态描述。
-     */
+    private final int code;
+    private final String msg;
     RespStatus(final int code, final String msg){
         this.code = code;
         this.msg = msg;
@@ -105,12 +97,14 @@ public enum RespStatus implements Serializable {
      * @return
      * 枚举类型。
      */
-    public static RespStatus parse(final int code){
-        for(RespStatus s : RespStatus.values()){
-            if(s.getCode() == code){
-                return s;
+    public static RespStatus parse(final Integer code){
+        if(code != null) {
+            for (RespStatus s : RespStatus.values()) {
+                if (s.getCode() == code) {
+                    return s;
+                }
             }
         }
-        return RespStatus.Success;
+        return null;
     }
 }

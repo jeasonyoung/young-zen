@@ -1,6 +1,6 @@
 package org.young.common.protocol.provider;
 
-import org.young.common.exception.TokenException;
+import org.young.common.Callback;
 
 import javax.annotation.Nonnull;
 import java.io.Serializable;
@@ -12,14 +12,12 @@ import java.io.Serializable;
 public interface TokenProvider extends Serializable {
 
     /**
-     * 根据渠道令牌加载用户数据。
+     * 加载渠道令牌下数据
      * @param channel
-     * 渠道号。
+     * 渠道号
      * @param token
-     * 登录令牌。
-     * @return 用户数据。
-     * @throws TokenException
-     * 令牌异常。
+     * 用户令牌
+     * @return 用户数据
      */
-    TokenUser loadUserByToken(@Nonnull final Integer channel, @Nonnull final String token) throws TokenException;
+    Callback<TokenUser> loadUserByToken(@Nonnull final Integer channel, @Nonnull final String token);
 }

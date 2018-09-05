@@ -1,12 +1,12 @@
-package org.young.common.protocol;
+package org.young.common.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.young.common.protocol.RespStatus;
+import org.young.common.protocol.RespUtils;
 import org.young.common.protocol.response.Response;
 
-import javax.annotation.Nonnull;
 import java.io.Serializable;
 
 /**
@@ -16,8 +16,6 @@ import java.io.Serializable;
  * date 2018/8/7 11:19
  */
 @Slf4j
-@ControllerAdvice
-@ResponseBody
 public class ExceptionHandlerAdvice {
 
     /**
@@ -26,9 +24,18 @@ public class ExceptionHandlerAdvice {
      * 异常。
      * @return 返回。
      */
-    @ExceptionHandler(value = { Throwable.class })
-    public Response<Serializable> handlerException(@Nonnull final Throwable e) {
+    @ExceptionHandler(value = { Exception.class })
+    @ResponseBody
+    public Response<Serializable> handlerException(final Exception e) {
         log.warn("handlerException-exp: " + e);
+        if(e instanceof AuthenException){
+            //解析错误代码
+            final RespStatus respStatus = RespStatus.parse(((AuthenException)e).getCode());
+            if(respStatus != null){
+                //创建响应报文
+                return RespUtils.createResponse(respStatus);
+            }
+        }
         return RespUtils.createResponse(RespStatus.ErrWithServer, e.getMessage());
     }
 }
