@@ -3,11 +3,13 @@
 ## maven 添加
 ```
 <project>
-    <repository>
-        <id>young-repo</id>
-        <name>young-repo</name>
-        <url>https://raw.github.com/jeasonyoung/young-zen/maven-repo/</url>
-    </repository>
+    <repositories>
+        <repository>
+            <id>young-repo</id>
+            <name>young-repo</name>
+            <url>https://raw.github.com/jeasonyoung/young-zen/master/maven-repo/</url>
+        </repository>
+    </repositories>
 </project>
 
 <dependencies>
