@@ -4,7 +4,7 @@ package org.young.common.spi;
  *  Spi缓存键
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/7/24 11:32
+ * date 2018/7/24 11:32
  */
 public interface BaseSpiCacheKey {
 

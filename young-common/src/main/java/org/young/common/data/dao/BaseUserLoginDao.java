@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
  * 用户登录-数据操作基接口
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/7/23 11:42
+ * date 2018/7/23 11:42
  */
 @NoRepositoryBean
 public interface BaseUserLoginDao<T extends BaseDataUserLogin> extends BaseDao<T> {

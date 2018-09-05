@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
  * 用户-数据操作基接口
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/7/23 11:42
+ * date 2018/7/23 11:42
  */
 public interface BaseUserDao<T extends BaseDataUser> extends BaseDao<T> {
 

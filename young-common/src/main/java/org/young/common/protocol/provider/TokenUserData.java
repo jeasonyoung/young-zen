@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
  * 令牌用户数据。
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/7/31 10:22
+ * date 2018/7/31 10:22
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

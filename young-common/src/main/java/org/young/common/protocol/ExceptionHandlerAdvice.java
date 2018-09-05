@@ -13,7 +13,7 @@ import java.io.Serializable;
  * 异常处理
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/8/7 11:19
+ * date 2018/8/7 11:19
  */
 @Slf4j
 @ControllerAdvice

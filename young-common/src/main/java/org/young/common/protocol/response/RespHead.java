@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 /**
  * 报文协议-响应报文头
- * @author jeasonyoung
+ * author jeasonyoung
  */
 @Data
 public class RespHead implements Serializable {

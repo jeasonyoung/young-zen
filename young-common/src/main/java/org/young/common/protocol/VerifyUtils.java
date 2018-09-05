@@ -255,11 +255,11 @@ public class VerifyUtils {
                     session.setAttribute(SessionConstants.SESSION_TOKEN_USER_KEY, tokenUser);
                 }
             }
-        }catch (TokenException.TokenExpireException e) {
-            log.warn("verifyToken(head: {})-exp: {}", head, e.getMessage());
-            return RespUtils.createResponse(RespStatus.TokenExpire);
         }catch (TokenException e){
-            log.warn("verifyToken(head: {})-exp: {}", head, e.getMessage());
+            log.warn("verifyToken(head: {}, code: {})-exp: {}", head, e.getCode(), e.getMessage());
+            if(e.getCode() == TokenException.TokenExpireException.code){
+                return RespUtils.createResponse(RespStatus.TokenExpire);
+            }
             return RespUtils.createResponse(RespStatus.TokenInvalid);
         }
         return null;

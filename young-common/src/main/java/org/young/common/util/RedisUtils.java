@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * redis工具类
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/8/30 19:21
+ * date 2018/8/30 19:21
  */
 @Slf4j
 public class RedisUtils {
@@ -107,6 +107,8 @@ public class RedisUtils {
      * 缓存键
      * @param data
      * 缓存数据
+     * @param <T>
+     *     缓存数据类型
      */
     public static <T extends Serializable> void writeRedisCacheList(@Nonnull final RedisTemplate<Object, Object> redisTemplate, @Nonnull final String key, @Nonnull final T data){
         log.debug("addCacheList(key: {}, data: {})...", key, data);
@@ -128,6 +130,10 @@ public class RedisUtils {
      * Redis操作模板
      * @param key
      * 缓存键
+     * @param clazz
+     * 缓存数据class
+     * @param <T>
+     *     缓存数据类型
      * @return 缓存数据集合
      */
     public static <T extends Serializable> List<T> readRedisCacheListAll(@Nonnull final RedisTemplate<Object, Object> redisTemplate, @Nonnull final String key, @Nonnull final Class<T> clazz){

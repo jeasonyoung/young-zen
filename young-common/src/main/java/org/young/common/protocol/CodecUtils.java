@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
  * 报文-编解码器
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/8/27 15:02
+ * date 2018/8/27 15:02
  */
 @Slf4j
 public class CodecUtils {

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * 数据处理接口
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/7/19 15:21
+ * date 2018/7/19 15:21
  */
 public interface BaseDao<T extends Serializable> {
 

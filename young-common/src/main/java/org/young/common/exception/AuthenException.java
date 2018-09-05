@@ -1,14 +1,14 @@
 package org.young.common.exception;
 
-import lombok.Getter;
-
 /**
  * 认证异常
  * @author jeasonyoung
  */
-@Getter
 public class AuthenException extends Exception {
-    public int code = 400;
+    /**
+     * 错误代码
+     */
+    public static int code = 400;
 
     /**
      * 构造函数。
@@ -17,6 +17,14 @@ public class AuthenException extends Exception {
      */
     public AuthenException(final String message){
         super(message);
+    }
+
+    /**
+     * 获取错误代码
+     * @return 错误代码
+     */
+    public int getCode(){
+        return code;
     }
 
     /**

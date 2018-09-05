@@ -18,7 +18,7 @@ import java.util.List;
  * 数据服务基类
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/7/19 15:23
+ * date 2018/7/19 15:23
  */
 @Slf4j
 public abstract class BaseDataService {

@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 响应报文体基类
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/7/23 17:09
+ * date 2018/7/23 17:09
  */
 @Data
 public abstract class BaseRespBody implements Serializable {

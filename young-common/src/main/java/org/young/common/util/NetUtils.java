@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
  * 网络工具类。
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/7/27 11:52
+ * date 2018/7/27 11:52
  */
 public class NetUtils {
     private static final String UNKNOWN = "unknown";

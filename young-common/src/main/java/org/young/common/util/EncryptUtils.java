@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
  * 密码工具类
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/7/26 16:09
+ * date 2018/7/26 16:09
  */
 @Slf4j
 public class EncryptUtils {

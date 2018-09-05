@@ -8,7 +8,7 @@ import java.io.Serializable;
  * 分页查询请求报文体
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/7/19 14:50
+ * date 2018/7/19 14:50
  */
 @Data
 public class ReqPagingBody<T extends Serializable> implements ReqPagingQueryBody<T> {

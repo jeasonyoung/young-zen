@@ -26,7 +26,7 @@ import java.lang.reflect.Parameter;
  * 通讯报文校验拦截器。
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/7/25 09:57
+ * date 2018/7/25 09:57
  */
 @Slf4j
 public abstract class BaseProtocolVerifyInterceptor {

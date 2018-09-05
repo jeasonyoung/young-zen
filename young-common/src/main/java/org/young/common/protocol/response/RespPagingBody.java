@@ -9,7 +9,7 @@ import java.util.List;
  * 分页查询响应报文体
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/7/19 14:53
+ * date 2018/7/19 14:53
  */
 @Data
 public class RespPagingBody<T extends Serializable> implements RespPagingResultBody<T> {

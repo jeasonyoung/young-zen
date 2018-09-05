@@ -6,7 +6,7 @@ import java.io.Serializable;
  * 分页查询条件
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/7/19 15:48
+ * date 2018/7/19 15:48
  */
 public interface PagingQuery<T extends Serializable> extends Serializable {
 

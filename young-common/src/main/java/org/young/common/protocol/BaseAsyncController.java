@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 异步处理控制器基类
  * @author jeasonyoung young1982@foxmail.com
- * @date 2018/7/15 15:46
+ * date 2018/7/15 15:46
  */
 @Slf4j
 public abstract class BaseAsyncController extends BaseController {

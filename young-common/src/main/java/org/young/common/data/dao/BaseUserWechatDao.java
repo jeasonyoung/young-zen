@@ -8,7 +8,7 @@ import org.young.common.data.domain.BaseDataUserWechat;
  * 用户关联微信-数据操作基接口
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/7/23 11:42
+ * date 2018/7/23 11:42
  */
 @NoRepositoryBean
 public interface BaseUserWechatDao<T extends BaseDataUserWechat> extends BaseDao<T> {

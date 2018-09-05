@@ -10,7 +10,7 @@ import java.util.UUID;
  * 数据实体基类
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/7/23 14:57
+ * date 2018/7/23 14:57
  */
 @Data
 public abstract class BaseDataEntity implements Serializable {

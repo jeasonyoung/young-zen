@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
  * 用户关联微信-数据
  *
  * @author yangyong young1982@foxmail.com
- * @date 2018/7/24 23:37
+ * date 2018/7/24 23:37
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

@@ -31,13 +31,16 @@ import java.util.List;
 public abstract class BaseController implements Serializable {
 
     /**
-     * 请求处理。
+     * 请求处理
      * @param request
-     * 请求报文。
+     * 请求报文
      * @param handler
-     * 业务处理。
-     * @return
-     * 响应报文。
+     * 报文解析
+     * @param <ReqBody>
+     *      请求报文体
+     * @param <RespBody>
+     *     响应报文体
+     * @return 响应报文
      */
     protected static <ReqBody extends Serializable, RespBody extends Serializable> Response<RespBody> action(@Nonnull final Request<ReqBody> request, @Nonnull final Handler<ReqBody, RespBody> handler) {
         try {
@@ -64,18 +67,18 @@ public abstract class BaseController implements Serializable {
     }
 
     /**
-     * 请求处理。
+     * 请求处理
      * @param request
-     * 请求报文。
+     * 请求报。
      * @param reqBodyClass
-     * 请求报文体类型。
+     * 请求报文体类型
      * @param handler
-     * 业务处理。
+     * 业务处理
      * @param <ReqBody>
-     *     请求报文体类型。
+     *     请求报文体类型
      * @param <RespBody>
-     *     响应报文体类型。
-     * @return 响应报文。
+     *     响应报文体类型
+     * @return 响应报文
      */
     protected static <ReqBody extends Serializable, RespBody extends Serializable> Response<RespBody> action(@Nonnull final String request,@Nonnull final Class<ReqBody> reqBodyClass,@Nonnull final Handler<ReqBody, RespBody> handler){
         try{
@@ -104,21 +107,21 @@ public abstract class BaseController implements Serializable {
     }
 
     /**
-     * 构建分页响应数据。
+     * 构建分页响应数据
      * @param resp
-     * 响应数据。
+     * 响应数据
      * @param reqQuery
-     * 查询请求。
+     * 查询请求
      * @param listener
-     * 数据处理器。
+     * 数据处理器
      * @param <Resp>
-     *     响应数据类型。
+     *     响应数据类型
      * @param <ReqQry>
-     *     查询数据类型。
+     *     查询数据类型
      * @param <Qry>
-     *     查询类型。
+     *     查询类型
      * @param <Ret>
-     *     响应类型。
+     *     响应类型
      */
     protected static <Resp extends Serializable,ReqQry extends Serializable, Qry extends Serializable, Ret extends Serializable> void buildRespPagingQuery(@Nonnull final RespPagingResultBody<Resp> resp, @Nullable final ReqPagingQueryBody<ReqQry> reqQuery, @Nonnull final PagingQueryListener<ReqQry, Qry, Ret, Resp> listener) {
         log.debug("buildRespPagingQuery(resp:" + resp + ",reqQuery:" + reqQuery + ",listener:" + listener + ")...");
