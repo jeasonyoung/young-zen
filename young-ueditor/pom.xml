@@ -11,7 +11,7 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>young-common</artifactId>
+    <artifactId>young-ueditor</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
 
@@ -20,27 +20,6 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- aop -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- redis -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- session redis -->
-        <dependency>
-            <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session-data-redis</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -58,11 +37,10 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- mybatis 分页 -->
+        <!-- 公共模块 -->
         <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <scope>provided</scope>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>young-common</artifactId>
         </dependency>
     </dependencies>
 
@@ -79,5 +57,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
