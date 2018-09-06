@@ -97,7 +97,7 @@ public class VerifyUtils {
                 }
             }
         }catch (Throwable e){
-            log.warn("verifyRequest(request: {})-exp:{}",request, e.getMessage());
+            log.warn("verifyRequest(request: "+ request +")-exp:" + e.getMessage(), e);
         }finally {
             final String totals = (System.currentTimeMillis() - start) + " ms ";
             log.info("verifyRequest(channelName:{})- run time: {}", channelName, totals);
