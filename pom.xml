@@ -45,6 +45,10 @@
         <module>young-common</module>
         <!-- ueditor -->
         <module>young-ueditor</module>
+        <!-- auth -->
+        <module>young-auth</module>
+        <!-- wechat -->
+        <module>young-wechat</module>
     </modules>
 
     <!-- 依赖管理 -->
