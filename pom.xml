@@ -47,6 +47,8 @@
         <module>young-ueditor</module>
         <!-- auth -->
         <module>young-auth</module>
+        <!-- auth starter -->
+        <module>young-auth-starter</module>
         <!-- wechat -->
         <module>young-wechat</module>
     </modules>
@@ -152,6 +154,20 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>young-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- auth 模块 -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>young-auth</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- WeChat 模块 -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>young-wechat</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
