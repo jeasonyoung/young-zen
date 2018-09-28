@@ -1,6 +1,7 @@
 package org.young.common.data.domain;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,6 +18,7 @@ public abstract class BaseDataEntity implements Serializable {
     /**
      * 主键ID
      */
+    @Id
     private String id;
     /**
      * 创建时间
@@ -28,17 +30,9 @@ public abstract class BaseDataEntity implements Serializable {
     private Date lastTime;
 
     /**
-     * 创建新的主键ID。
-     * @return 主键ID。
-     */
-    public static String createNewId(){
-        return UUID.randomUUID().toString();
-    }
-
-    /**
      * 创建主键ID。
      */
     public void createId(){
-        this.setId(createNewId());
+        this.setId(UUID.randomUUID().toString());
     }
 }
