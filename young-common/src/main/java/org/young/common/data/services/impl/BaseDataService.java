@@ -24,9 +24,9 @@ import java.util.List;
 public abstract class BaseDataService {
 
     /**
-     * 启用分页。
+     * 启用分页
      * @param query
-     * 查询条件。
+     * 查询条件
      */
     private void startPage(@Nonnull final PagingQuery<?> query) {
         log.debug("startPage: {}", query);
@@ -49,31 +49,31 @@ public abstract class BaseDataService {
     }
 
     /**
-     * 获取总数据。
+     * 获取总数据
      * @param list
-     * 分页查询数据集合。
+     * 分页查询数据集合
      * @param <T>
-     *     数据类型。
-     * @return 总数据。
+     *     数据类型
+     * @return 总数据
      */
     private <T extends Serializable> long totalOfPage(@Nonnull final List<T> list){
         return PageInfo.of(list).getTotal();
     }
 
     /**
-     * 构建分页查询处理。
+     * 构建分页查询处理
      * @param pagingResult
-     * 分页查询结果。
+     * 分页查询结果
      * @param pagingQuery
-     * 分页查询条件。
+     * 分页查询条件
      * @param listener
-     * 查询处理监听器。
+     * 查询处理监听器
      * @param <Ret>
-     *     查询结果类型。
+     *     反馈结果类型
      * @param <Qry>
-     *     查询条件类型。
+     *     查询条件类型
      * @param <Item>
-     *     数据类型。
+     *     查询结果类型
      */
     protected <Ret extends Serializable, Qry extends Serializable,Item extends Serializable> void buildPagingQueryResult(@Nonnull final PagingResult<Ret> pagingResult, @Nullable final PagingQuery<Qry> pagingQuery, @Nonnull final QueryListener<Qry, Item, Ret> listener){
         log.debug("buildPagingQuery(result: {}, query: {}, listener: {})...", pagingResult, pagingQuery, listener);
@@ -97,17 +97,38 @@ public abstract class BaseDataService {
     }
 
     /**
-     * 构建查询数据处理。
-     * @param result
-     * 查询结果。
-     * @param query
-     * 查询条件。
+     * 构建分页查询处理
+     * @param pagingResult
+     * 分页查询结果
+     * @param pagingQuery
+     * 分页查询条件
      * @param listener
-     * 查询处理器。
+     * 查询处理监听器
      * @param <Ret>
-     *     查询结果。
+     *     反馈结果类型
      * @param <Qry>
-     *     查询条件。
+     *     查询条件类型
+     * @param <Item>
+     *     查询结果类型
+     */
+    protected <Ret extends Serializable, Qry extends Serializable,Item extends Serializable> void buildPageableQueryResult(@Nonnull final PagingResult<Ret> pagingResult, @Nonnull final PagingQuery<Qry> pagingQuery, @Nonnull final QueryPageableListener<Qry, Item, Ret> listener){
+        log.debug("buildPagingQuery(result: {}, query: {}, listener: {})...", pagingResult, pagingQuery, listener);
+        //分页查询处理
+        PagingUtils.buildPageableQuery(pagingResult, pagingQuery, listener);
+    }
+
+    /**
+     * 构建查询数据处理
+     * @param result
+     * 查询结果
+     * @param query
+     * 查询条件
+     * @param listener
+     * 查询处理器
+     * @param <Ret>
+     *     查询结果
+     * @param <Qry>
+     *     查询条件
      * @param <Item>
      *     数据类型
      */
@@ -117,18 +138,18 @@ public abstract class BaseDataService {
     }
 
     /**
-     * 查询数据处理。
+     * 查询数据处理
      * @param query
-     * 查询条件。
+     * 查询条件
      * @param listener
-     * 查询处理器。
+     * 查询处理器
      * @param <Ret>
-     *     查询结果类型。
+     *     反馈结果类型
      * @param <Qry>
-     *     查询条件类型。
+     *     查询条件类型
      * @param <Item>
-     *     数据类型。
-     * @return 查询结果集合。
+     *     查询结果类型
+     * @return 查询结果集合
      */
     protected <Ret extends Serializable, Qry extends Serializable,Item extends Serializable> List<Ret> queryHandler(@Nullable final Qry query, @Nonnull final QueryListener<Qry, Item, Ret> listener){
         log.debug("queryHandler(query: {}, listener: {})...", query, listener);
@@ -136,22 +157,35 @@ public abstract class BaseDataService {
     }
 
     /**
-     * 查询处理监听器。
+     * 查询处理监听器
      * @param <Qry>
-     *     查询条件类型。
+     *     查询条件类型
      * @param <Item>
-     *     查询数据类型。
+     *     查询数据类型
      * @param <Ret>
-     *     查询结果类型。
+     *     查询结果类型
      */
     protected interface QueryListener<Qry extends Serializable, Item extends Serializable, Ret extends Serializable> extends PagingUtils.QueryListener<Qry, Item, Ret> {
 
     }
 
     /**
-     * 分页查询结果。
+     * 查询处理监听器
+     * @param <Qry>
+     *     查询条件类型
+     * @param <Item>
+     *     查询数据类型
      * @param <Ret>
-     *     查询结果类型。
+     *     查询结果类型
+     */
+    protected interface QueryPageableListener<Qry extends Serializable, Item extends Serializable, Ret extends Serializable> extends PagingUtils.QueryPageableListener<Qry, Item, Ret> {
+
+    }
+
+    /**
+     * 分页查询结果
+     * @param <Ret>
+     *     查询结果类型
      */
     @Data
     protected class PagingQueryResult<Ret extends Serializable> implements PagingResult<Ret> {
