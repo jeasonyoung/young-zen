@@ -16,7 +16,10 @@ import javax.annotation.Nonnull;
  */
 @Slf4j
 public class EncryptUtils {
-    private static final String DEFAULT_PWD = "888888";
+    /**
+     * 默认密码
+     */
+    public static final String DEFAULT_PWD = "888888";
 
     /**
      * 创建密码密文。
