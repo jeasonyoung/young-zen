@@ -111,7 +111,7 @@ public abstract class BaseDataService {
      * @param <Item>
      *     查询结果类型
      */
-    protected <Ret extends Serializable, Qry extends Serializable,Item extends Serializable> void buildPageableQueryResult(@Nonnull final PagingResult<Ret> pagingResult, @Nonnull final PagingQuery<Qry> pagingQuery, @Nonnull final QueryPageableListener<Qry, Item, Ret> listener){
+    protected <Ret extends Serializable, Qry extends Serializable,Item extends Serializable> void buildPageableQueryResult(@Nonnull final PagingResult<Ret> pagingResult, @Nullable final PagingQuery<Qry> pagingQuery, @Nonnull final QueryPageableListener<Qry, Item, Ret> listener){
         log.debug("buildPagingQuery(result: {}, query: {}, listener: {})...", pagingResult, pagingQuery, listener);
         //分页查询处理
         PagingUtils.buildPageableQuery(pagingResult, pagingQuery, listener);

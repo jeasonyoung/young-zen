@@ -115,19 +115,28 @@ public class PagingUtils {
      */
     public static <Ret extends Serializable, Qry extends Serializable,Item extends Serializable> void buildPageableQuery(
             @Nonnull final PagingResult<Ret> pagingResult,
-            @Nonnull final PagingQuery<Qry> pagingQuery,
+            @Nullable final PagingQuery<Qry> pagingQuery,
             @Nonnull final QueryPageableListener<Qry, Item, Ret> listener){
         log.debug("buildPageableQuery(pagingResult: {}, pagingQuery: {}, listener: {})...", pagingResult, pagingQuery, listener);
         try {
             //查询条件
-            int index = pagingQuery.getIndex() - 1;
-            if(index < 0){
+            int index = 0, rows = 10;
+            if(pagingQuery != null) {
+                //设置页码
+                index = pagingQuery.getIndex() - 1;
+                //设置每页数据
+                rows = pagingQuery.getRows();
+            }
+            if (index < 0) {
                 index = 0;
+            }
+            if(rows <= 0){
+                rows = 10;
             }
             //查询结果数据
             List<Item> items = null;
             //查询数据
-            final Page<Item> pageItems = listener.query(pagingQuery.getQuery(), PageRequest.of(index, pagingQuery.getRows()));
+            final Page<Item> pageItems = listener.query(pagingQuery == null ? null : pagingQuery.getQuery(), PageRequest.of(index, rows));
             if(pageItems != null){
                 //设置数据总数
                 pagingResult.setTotals(pageItems.getTotalElements());
