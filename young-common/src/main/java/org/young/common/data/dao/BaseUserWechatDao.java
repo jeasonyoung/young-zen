@@ -22,12 +22,12 @@ public interface BaseUserWechatDao<T extends BaseDataUserWechat> extends BaseDao
     T loadLastByOpen(final String openId);
 
     /**
-     * 根据用户ID加载数据
-     * @param userId
-     * 用户ID
+     * 根据unionId加载数据
+     * @param unionId
+     * 关联 Union ID
      * @return 关联数据
      */
-    T loadLastByUser(final String userId);
+    T loadLastByUnion(final String unionId);
 
     /**
      * 根据用户和OpenID加载关联数据。
