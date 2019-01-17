@@ -120,7 +120,7 @@ public class VerifyUtils {
             return RespUtils.createResponse(RespStatus.ErrWithVersion);
         }
         //比较目标版本号
-        if(listener.getCurrentAPIVersion() != null && listener.getCurrentAPIVersion() > 0 && head.getVersion().equals(listener.getCurrentAPIVersion())){
+        if(listener.getCurrentAPIVersion() != null && listener.getCurrentAPIVersion() > 0 && !head.getVersion().equals(listener.getCurrentAPIVersion())){
             log.warn("版本号(head-version: {}, current: {})-不一致!", head.getVersion(), listener.getCurrentAPIVersion());
             return RespUtils.createResponse(RespStatus.ErrWithVersion);
         }
