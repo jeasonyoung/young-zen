@@ -42,7 +42,7 @@ public abstract class BaseController implements Serializable {
      *     响应报文体
      * @return 响应报文
      */
-    protected static <ReqBody extends Serializable, RespBody extends Serializable> Response<RespBody> action(@Nonnull final Request<ReqBody> request, @Nonnull final Handler<ReqBody, RespBody> handler) {
+    protected <ReqBody extends Serializable, RespBody extends Serializable> Response<RespBody> action(@Nonnull final Request<ReqBody> request, @Nonnull final Handler<ReqBody, RespBody> handler) {
         try {
             log.debug("action(request:" + request + ")...");
             //业务处理
@@ -80,7 +80,7 @@ public abstract class BaseController implements Serializable {
      *     响应报文体类型
      * @return 响应报文
      */
-    protected static <ReqBody extends Serializable, RespBody extends Serializable> Response<RespBody> action(@Nonnull final String request,@Nonnull final Class<ReqBody> reqBodyClass,@Nonnull final Handler<ReqBody, RespBody> handler){
+    protected <ReqBody extends Serializable, RespBody extends Serializable> Response<RespBody> action(@Nonnull final String request,@Nonnull final Class<ReqBody> reqBodyClass,@Nonnull final Handler<ReqBody, RespBody> handler){
         try{
             log.debug("action(request:"+ request +",reqBodyClass:"+ reqBodyClass +")...");
             Assert.hasText(request, "'request'请求报文为空!");
@@ -96,14 +96,39 @@ public abstract class BaseController implements Serializable {
             //json对象转换
             final String reqBodyJson = JSON.toJSONString(req.getBody());
             log.debug("reqBodyJson=>" + reqBodyJson);
+            //构建请求报文对象
+            final Request<ReqBody> reqBodyRequest = new Request<>();
+            //设置请求报文头
+            reqBodyRequest.setHead(req.getHead());
+            //设置请求报文体
+            reqBodyRequest.setBody(JSON.parseObject(reqBodyJson, reqBodyClass));
+            //检查请求报文
+            Response<RespBody> respBodyResponse = checkRequest(reqBodyClass, reqBodyRequest);
+            if(respBodyResponse != null){
+                return respBodyResponse;
+            }
             //业务处理
-            final RespBody respBody = handler.handler(req.getHead(), JSON.parseObject(reqBodyJson, reqBodyClass));
-            //响应报文处理
-            return RespUtils.createResponse(RespStatus.Success, respBody);
+            return action(reqBodyRequest, handler);
         }catch (Throwable e){
             log.error("action("+ request +")-exp:" + e.getMessage(), e);
             return RespUtils.createResponse(RespStatus.ErrWithServer, e.getMessage());
         }
+    }
+
+    /**
+     * 检查请求报文
+     * @param reqBodyClass
+     * 请求报文体类型
+     * @param request
+     * 请求报文
+     * @param <ReqBody>
+     *     请求报文体类型
+     * @param <RespBody>
+     *     响应报文体类型
+     * @return 检查结果
+     */
+    protected <ReqBody extends Serializable, RespBody extends Serializable> Response<RespBody> checkRequest(@Nonnull final Class<ReqBody> reqBodyClass, @Nonnull final Request<ReqBody> request){
+        return null;
     }
 
     /**
@@ -123,7 +148,7 @@ public abstract class BaseController implements Serializable {
      * @param <Ret>
      *     响应类型
      */
-    protected static <Resp extends Serializable,ReqQry extends Serializable, Qry extends Serializable, Ret extends Serializable> void buildRespPagingQuery(@Nonnull final RespPagingResultBody<Resp> resp, @Nullable final ReqPagingQueryBody<ReqQry> reqQuery, @Nonnull final PagingQueryListener<ReqQry, Qry, Ret, Resp> listener) {
+    protected <Resp extends Serializable,ReqQry extends Serializable, Qry extends Serializable, Ret extends Serializable> void buildRespPagingQuery(@Nonnull final RespPagingResultBody<Resp> resp, @Nullable final ReqPagingQueryBody<ReqQry> reqQuery, @Nonnull final PagingQueryListener<ReqQry, Qry, Ret, Resp> listener) {
         log.debug("buildRespPagingQuery(resp:" + resp + ",reqQuery:" + reqQuery + ",listener:" + listener + ")...");
         //查询条件
         final PagingQueryImpl<Qry> query = new PagingQueryImpl<>();
@@ -185,7 +210,7 @@ public abstract class BaseController implements Serializable {
      * @param <Ret>
      *     查询数据类型。
      */
-    protected static <Resp extends Serializable, Ret extends Serializable> void buildRespQueryResult(@Nonnull final RespPagingResultBody<Resp> resp, @Nonnull final QueryListener<Ret, Resp> listener){
+    protected <Resp extends Serializable, Ret extends Serializable> void buildRespQueryResult(@Nonnull final RespPagingResultBody<Resp> resp, @Nonnull final QueryListener<Ret, Resp> listener){
         log.debug("buildRespQueryResult(resp:"+ resp +",listener:"+ listener +")...");
         try{
             //数据查询
