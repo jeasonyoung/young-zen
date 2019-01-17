@@ -103,8 +103,13 @@ public abstract class BaseController implements Serializable {
             //设置请求报文体
             reqBodyRequest.setBody(JSON.parseObject(reqBodyJson, reqBodyClass));
             //检查请求报文
-            Response<RespBody> respBodyResponse = checkRequest(reqBodyClass, reqBodyRequest);
-            if(respBodyResponse != null){
+            final Response<?> response = checkRequest(reqBodyClass, reqBodyRequest);
+            if(response != null){
+                //初始化响应报文
+                final Response<RespBody> respBodyResponse = new Response<>();
+                //设置响应报文体
+                respBodyResponse.setHead(response.getHead());
+                //返回报文
                 return respBodyResponse;
             }
             //业务处理
@@ -121,13 +126,9 @@ public abstract class BaseController implements Serializable {
      * 请求报文体类型
      * @param request
      * 请求报文
-     * @param <ReqBody>
-     *     请求报文体类型
-     * @param <RespBody>
-     *     响应报文体类型
      * @return 检查结果
      */
-    protected <ReqBody extends Serializable, RespBody extends Serializable> Response<RespBody> checkRequest(@Nonnull final Class<ReqBody> reqBodyClass, @Nonnull final Request<ReqBody> request){
+    protected Response<? extends Serializable> checkRequest(@Nonnull final Class<?> reqBodyClass, @Nonnull final Request<? extends Serializable> request){
         return null;
     }
 
