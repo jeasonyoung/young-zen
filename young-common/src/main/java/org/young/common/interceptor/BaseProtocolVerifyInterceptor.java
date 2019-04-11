@@ -133,7 +133,7 @@ public abstract class BaseProtocolVerifyInterceptor {
             }
             final Object result = joinPoint.proceed(args);
             if(isInterceptor && (result instanceof Serializable)){
-                log.info("response[methodName: {}]: \n {}", methodName, JSON.toJSONString(result));
+                log.debug("response[methodName: {}]: \n {}", methodName, JSON.toJSONString(result));
             }
             return result;
         }catch (Throwable e){
