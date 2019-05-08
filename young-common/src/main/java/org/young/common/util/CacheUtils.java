@@ -67,7 +67,11 @@ public class CacheUtils {
      */
     public static <K, V> V getCacheValue(@Nonnull final Cache<K, V> cache, @Nonnull final K key, @Nonnull Callable<? extends V> loader){
         try{
-            return cache.get(key, loader);
+            final V data = cache.get(key, loader);
+            if(data == null){
+                cache.invalidate(key);
+            }
+            return data;
         }catch (Throwable e){
             log.warn("getCacheValue(key: {})-exp: {}", key, e.getMessage());
         }
