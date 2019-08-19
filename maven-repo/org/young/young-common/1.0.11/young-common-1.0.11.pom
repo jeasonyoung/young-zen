@@ -8,19 +8,18 @@
     <parent>
         <groupId>org.young</groupId>
         <artifactId>young-parent</artifactId>
-        <version>1.0.8</version>
+        <version>1.0.11</version>
     </parent>
 
-    <artifactId>young-auth-starter</artifactId>
+    <artifactId>young-common</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
 
     <dependencies>
-
-        <!-- web -->
+        <!-- servlet -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -31,6 +30,27 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- session redis -->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- web mvc -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- logging -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -38,18 +58,12 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- 公共模块 -->
+        <!-- mybatis 分页 -->
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>young-common</artifactId>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <scope>provided</scope>
         </dependency>
-
-        <!-- auth 模块 -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>young-auth</artifactId>
-        </dependency>
-
     </dependencies>
 
     <build>

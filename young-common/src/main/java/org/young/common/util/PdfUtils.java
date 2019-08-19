@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,6 +16,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * PDF-工具类
@@ -24,25 +28,38 @@ import java.util.concurrent.TimeUnit;
  **/
 @Slf4j
 public class PdfUtils {
-    /**
-     * 线程池
-     */
+    private static final Pattern PAGES_REGEX_PATTERN = Pattern.compile("Page [\\d+] of ([\\d+])$");
+
     private static final ExecutorService POOLS = new ThreadPoolExecutor(5, 10, 10, TimeUnit.SECONDS,
             new LinkedBlockingQueue<>(), new ThreadFactoryBuilder().setNameFormat("pools-pdf-%d").build());
 
     /**
      * 生成PDF文件流
-     * @param url
-     * url
-     * @param output
-     * PDF输出流
-     * @throws Exception
-     * 异常
+     *
+     * @param url    url
+     * @param output PDF输出流
+     * @throws Exception 异常
      */
-    public static synchronized void createPdf(@Nonnull final String url,@Nonnull final OutputStream output) throws Exception {
+    public static synchronized void createPdf(@Nonnull final String url, @Nonnull final OutputStream output) throws Exception {
+        //总页数
+        final long pages = createPdfToPages(url, output);
+        log.info("createPdf(url: {})=> pages: {}", url, pages);
+    }
+
+    /**
+     * 生成PDF文件流
+     *
+     * @param url    url
+     * @param output PDF输出流
+     * @return 总页数
+     * @throws Exception 异常
+     */
+    public static synchronized long createPdfToPages(@Nonnull final String url, @Nonnull final OutputStream output) throws Exception {
         log.debug("createPdf(url: {})...", url);
         //检查参数
         Assert.hasText(url, "'url'不能为空!");
+        //总页数数据
+        final AtomicLong totalPages = new AtomicLong(0L);
         //准备执行外部进程
         final ProcessBuilder processBuilder = new ProcessBuilder(Arrays.asList("wkhtmltopdf", url, "-"));
         //执行PDF生成进程
@@ -50,7 +67,7 @@ public class PdfUtils {
         //异步线程处理
         POOLS.execute(() -> {
             //清理错误流
-            clearProcessErrorStream(pdfProcess.getErrorStream());
+            clearProcessErrorStream(pdfProcess.getErrorStream(), totalPages);
         });
         //数据流读取
         try (InputStream in = pdfProcess.getInputStream()) {
@@ -66,26 +83,42 @@ public class PdfUtils {
             //销毁外部进程
             pdfProcess.destroy();
         }
+        return totalPages.get();
     }
 
     /**
      * 清除进程错误流数据
-     * @param in
-     * 输入流
+     *
+     * @param in           输入流
+     * @param atomRefPages 总页数
      */
-    private static void clearProcessErrorStream(final InputStream in){
-        if(in == null){
-            return;
-        }
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(in))){
-            String context;
-            while ((context = reader.readLine()) != null){
-                if(!Strings.isNullOrEmpty(context)) {
-                    log.debug("clearProcessErrorStream: {}", context);
+    private static void clearProcessErrorStream(@Nullable final InputStream in, @Nonnull final AtomicLong atomRefPages) {
+        if (in != null) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+                String context;
+                while ((context = reader.readLine()) != null) {
+                    if (!Strings.isNullOrEmpty(context)) {
+                        context = context.trim();
+                        //检查正则表达式
+                        final Matcher matcher = PAGES_REGEX_PATTERN.matcher(context);
+                        if (matcher.find()) {
+                            String pagesStr = "";
+                            try {
+                                pagesStr = matcher.group(1);
+                                final long pages = Long.parseLong(pagesStr);
+                                if (atomRefPages.get() < pages) {
+                                    atomRefPages.set(pages);
+                                }
+                            } catch (NumberFormatException e) {
+                                log.warn("clearProcessErrorStream-parseLong(pagesStr: {})-exp: {}", pagesStr, e.getMessage());
+                            }
+                        }
+                        log.debug("clearProcessErrorStream: {}[pages: {}]", context, atomRefPages.get());
+                    }
                 }
+            } catch (Throwable ex) {
+                log.warn("clearProcessErrorStream-exp: {}", ex.getMessage());
             }
-        }catch (Throwable ex){
-            log.warn("clearProcessErrorStream-exp: {}", ex.getMessage());
         }
     }
 }
