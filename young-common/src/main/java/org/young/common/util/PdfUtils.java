@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  **/
 @Slf4j
 public class PdfUtils {
-    private static final Pattern PAGES_REGEX_PATTERN = Pattern.compile("([\\d+])$");
+    private static final Pattern PAGES_REGEX_PATTERN = Pattern.compile("(\\d+)$");
 
     private static final ExecutorService POOLS = new ThreadPoolExecutor(5, 10, 10, TimeUnit.SECONDS,
             new LinkedBlockingQueue<>(), new ThreadFactoryBuilder().setNameFormat("pools-pdf-%d").build());
