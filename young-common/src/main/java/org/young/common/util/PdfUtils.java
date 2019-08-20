@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  **/
 @Slf4j
 public class PdfUtils {
-    private static final Pattern PAGES_REGEX_PATTERN = Pattern.compile("Page [\\d+] of ([\\d+])$");
+    private static final Pattern PAGES_REGEX_PATTERN = Pattern.compile("([\\d+])$");
 
     private static final ExecutorService POOLS = new ThreadPoolExecutor(5, 10, 10, TimeUnit.SECONDS,
             new LinkedBlockingQueue<>(), new ThreadFactoryBuilder().setNameFormat("pools-pdf-%d").build());
@@ -42,7 +42,7 @@ public class PdfUtils {
      */
     public static synchronized void createPdf(@Nonnull final String url, @Nonnull final OutputStream output) throws Exception {
         //总页数
-        final long pages = createPdfToPages(url, output);
+        final int pages = createPdfToPages(url, output);
         log.info("createPdf(url: {})=> pages: {}", url, pages);
     }
 
@@ -54,12 +54,12 @@ public class PdfUtils {
      * @return 总页数
      * @throws Exception 异常
      */
-    public static synchronized long createPdfToPages(@Nonnull final String url, @Nonnull final OutputStream output) throws Exception {
+    public static synchronized int createPdfToPages(@Nonnull final String url, @Nonnull final OutputStream output) throws Exception {
         log.debug("createPdf(url: {})...", url);
         //检查参数
         Assert.hasText(url, "'url'不能为空!");
         //总页数数据
-        final AtomicLong totalPages = new AtomicLong(0L);
+        final AtomicInteger totalPages = new AtomicInteger(0);
         //准备执行外部进程
         final ProcessBuilder processBuilder = new ProcessBuilder(Arrays.asList("wkhtmltopdf", url, "-"));
         //执行PDF生成进程
@@ -92,7 +92,7 @@ public class PdfUtils {
      * @param in           输入流
      * @param atomRefPages 总页数
      */
-    private static void clearProcessErrorStream(@Nullable final InputStream in, @Nonnull final AtomicLong atomRefPages) {
+    private static void clearProcessErrorStream(@Nullable final InputStream in, @Nonnull final AtomicInteger atomRefPages) {
         if (in != null) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
                 String context;
@@ -105,12 +105,12 @@ public class PdfUtils {
                             String pagesStr = "";
                             try {
                                 pagesStr = matcher.group(1);
-                                final long pages = Long.parseLong(pagesStr);
+                                final int pages = Integer.parseInt(pagesStr);
                                 if (atomRefPages.get() < pages) {
                                     atomRefPages.set(pages);
                                 }
                             } catch (NumberFormatException e) {
-                                log.warn("clearProcessErrorStream-parseLong(pagesStr: {})-exp: {}", pagesStr, e.getMessage());
+                                log.warn("clearProcessErrorStream-parseInt(pagesStr: {})-exp: {}", pagesStr, e.getMessage());
                             }
                         }
                         log.debug("clearProcessErrorStream: {}[pages: {}]", context, atomRefPages.get());
