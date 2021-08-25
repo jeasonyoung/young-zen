@@ -29,7 +29,7 @@
 
         <fastjson.version>1.2.47</fastjson.version>
         <okhttp3.version>3.11.0</okhttp3.version>
-        <xstream.version>1.4.10</xstream.version>
+        <xstream.version>1.4.18</xstream.version>
         <!-- tools -->
         <guava.version>23.6.1-jre</guava.version>
         <commons-codec.version>1.11</commons-codec.version>
