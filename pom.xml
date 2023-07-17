@@ -33,7 +33,7 @@
         <!-- tools -->
         <guava.version>23.6.1-jre</guava.version>
         <commons-codec.version>1.11</commons-codec.version>
-        <commons-io.version>2.5</commons-io.version>
+        <commons-io.version>2.7</commons-io.version>
         <commons-fileupload.version>1.3.1</commons-fileupload.version>
         <!-- lombok -->
         <lombok.version>1.18.0</lombok.version>
